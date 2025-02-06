@@ -37,16 +37,56 @@ operator precedence through the use of parentheses in the input expression.
 */
 
 public class TwoStack {
-    Stack<String> ops  = new Stack<String>();
-    Stack<Double> vals = new Stack<Double>();
-    public double evaluate(String s){
+    Stack<String> ops = new Stack<>();
+    Stack<Double> vals = new Stack<>();
+
+    public double evaluate(String s) {
         String[] tokens = s.split(" ");
-       
-        //Loop over the tokens until you reach the end of the expression
-        //TODO
 
-        
+        for (String token : tokens) {
+            if (token.equals("(")) {
+                // Ignore opening parenthesis
+                continue;
+            }
 
+            // push operand into ops stack only
+            else if (token.equals("+")) {
+                ops.push(token);
+            } else if (token.equals("-")) {
+                ops.push(token);
+            } else if (token.equals("*")) {
+                ops.push(token);
+            } else if (token.equals("/")) {
+                ops.push(token);
+            } else if (token.equals(")")) {
+
+                //first pop out the operator from ops stack
+                //then pop first element from the vals stack
+                // further element will pop out when we really perform the arithmetic operation
+
+                String op = ops.pop();
+                double val = vals.pop();
+
+                if (op.equals("+")) {
+                    //we pop out second element from the val stack as you can see
+                    // we will do it for all the operation
+                    val = vals.pop() + val;
+                } else if (op.equals("-")) {
+                    val = vals.pop() - val;
+                } else if (op.equals("*")) {
+                    val = vals.pop() * val;
+                } else if (op.equals("/")) {
+                    val = vals.pop() / val;
+                }
+
+                //push the compute value again in the stack
+                vals.push(val);
+            } else {
+                // Token is a number, push to vals stack
+                // do not forget convert into doubles data types
+                vals.push(Double.parseDouble(token));
+            }
+        }
 
         return vals.pop();
     }
